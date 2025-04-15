@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Add a manufacturer</title>
+</head>
+<body>
+	<h1>Add a manufacturer</h1>
+	<form action="/new" method="POST">
+		<label for="name">Manufacturer: </label>
+		<input type="text" name="name" id="name" maxlength="25" required>
+		<label for="founded">Founded: </label>
+		<input 
+			type="number" 
+			name="founded" 
+			id="founded" 
+			min="1900" 
+			max="2100" 
+			step="1" 
+			placeholder="YYYY" 
+			required
+		>
+		<label for="owner">Owner: </label>
+		<input type="text" name="owner" id="owner" maxlength="25">
+		<button type="submit">Add</button>
+	</form>
+</body>
+</html>
