@@ -1,44 +1,99 @@
-// import db
+const db = require('../db/queries');
 
-async function getCategories() {
-	// retrieve all categories from db
-	// pass it to index.ejs
-	// render index.ejs
-	// index should loop over all categories and display them
-	// all categories should have link element leading to /:category
+const manufacturers = [
+  { 
+		id: 1, 
+		name: 'Toyota', 
+		founded: 1937, 
+		owner: 'Toyota Group'
+	},
+  { 
+		id: 2, 
+		name: 'Nissan', 
+		founded: 1933, 
+		owner: 'Renault' 
+	},
+];
+
+const cars = [
+  { 
+		id: 1, 
+		model: 'GT-R R34', 
+		price: 120990, 
+		year: 2001, 
+		mileage: 52226, 
+		engine: '2.6L Twin-Turbo I6 (RB26DETT)', 
+		hp: 280,
+		manufacturer_id: 2,
+	},
+  { 
+		id: 2, 
+		model: 'Supra', 
+		price: 72250, 
+		year: 1996, 
+		mileage: 76344, 
+		engine: '3.0L Twin-Turbo I6 (2JZ-GTE)*', 
+		hp: 320,
+		manufacturer_id: 1,
+	},
+];
+
+async function getManufacturers(req, res) {
+	const manufacturers = await db.getManufacturers();
+	
+	res.render('index', {
+		manufacturers: manufacturers
+	});
 };
 
-async function getChar() {
-	// from the req.params take out the category and char id
-	// query db to retrieve that char
-	// render the char
+async function getManufacturerCars(req, res) {
+	const manufacturer = await db.getManufacturer(req.params.manufacturer);
+	const cars = await db.getManufacturerCars(manufacturer.name);
+
+	res.render('manufacturer', {
+		manufacturer: manufacturer,
+		cars: cars
+	});
 };
 
-async function getCategoryChars() {
-	// from the req.params take out the category
-	// query db to retrieve all chars from that category
-	// render view category
-	// pass in the chars and loop over them to display them
+async function getCar(req, res) {
+	const car = await db.getCar(req.params.carId);
+
+	res.render('car', {
+		car: car
+	});
 };
 
-async function createCategoryGet() {
-	// render the form for new category
+async function createManufacturerGet(req, res) {
+	res.render('createManufacturer');
 };
 
-async function createCategoryPost() {
+async function createManufacturerPost(req, res) {
 	// receive form data from req.body
 	// validate/sanitize
 	// insert into db
 	// redirect to /
+	res.redirect('/');
 };
 
-async function createCharGet() {
-	// render the form for new char
+async function createCarGet(req, res) {
+	res.render('createCar');
 };
 
-async function createCharPost() {
+async function createCarPost(req, res) {
 	// receive form data from req.body
+	// manufacturer_id will come from select input value
 	// validate/sanitize
 	// insert into db
-	// redirect to /:category where the char was created
+	// redirect to /:manufacturer where the car was created
+};
+
+module.exports = {
+	getManufacturers,
+	getCar,
+	getManufacturerCars,
+	createManufacturerGet,
+	createManufacturerPost,
+	createCarGet,
+	createCarPost,
 };
