@@ -1,16 +1,15 @@
 const { Router } = require('express');
-const indexRouter = Router();
 const inventoryController = require('../controllers/inventoryController');
+const indexRouter = Router();
 
-indexRouter.get('/new', inventoryController.createCategoryGet);
-indexRouter.get('/new', inventoryController.createCategoryPost);
+indexRouter.get('/add-manufacturer', inventoryController.createManufacturerGet);
+indexRouter.post('/add-manufacturer', inventoryController.createManufacturerPost);
 
-indexRouter.get('/', inventoryController.getCategories);
+indexRouter.get('/', inventoryController.getManufacturers);
 
-indexRouter.get('/:category', inventoryController.getCategoryChars);
-indexRouter.get('/:category/new', inventoryController.createCharGet);
-indexRouter.get('/:category/new', inventoryController.createCharPost);
-indexRouter.get('/:category/:itemId', inventoryController.getChar);
-
+indexRouter.get('/:manufacturer', inventoryController.getManufacturerCars);
+indexRouter.get('/:manufacturer/add-car', inventoryController.createCarGet);
+indexRouter.post('/:manufacturer/add-car', inventoryController.createCarPost);
+indexRouter.get('/:manufacturer/:carId', inventoryController.getCar);
 
 module.exports = indexRouter;
