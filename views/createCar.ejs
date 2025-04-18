@@ -7,16 +7,21 @@
 </head>
 <body>
 	<h1>Add a car</h1>
-	<form action="/new" method="POST">
+	<!-- print out the errors if they exist -->
+	<%- include('partials/errors.ejs') %>
+	<form action="/<%= selectedManufacturer %>/add-car" method="POST">
 		<label for="manufacturer">Choose a manufacturer:</label>
-		<select name="manufacturer" id="manufacturer" required>
+		<select name="manufacturerId" id="manufacturer" required>
 			<option value="">--Please choose an option--</option>
-			<% categories.forEach(category => { %>
-				<option value="<%= category.id %>"><%= category.name %></option>
+			<% manufacturers.forEach(manufacturer => { %>
+				<option 
+					value="<%= manufacturer.id %>"
+					<%= selectedManufacturer === manufacturer.name ? 'selected' : '' %>
+				><%= manufacturer.name %></option>
 			<% }) %>
 		</select>
 		<label for="model">Model: </label>
-		<input type="text" name="model" id="model" maxlength="25" required>
+		<input type="text" name="model" id="model" maxlength="30" required>
 		<label for="price">Price: </label>
 		<input type="number" name="price" id="price" required>
 		<label for="year">Year: </label>
@@ -33,7 +38,7 @@
 		<label for="mileage">Mileage: </label>
 		<input type="number" name="mileage" id="mileage">
 		<label for="engine">Engine: </label>
-		<input type="text" name="engine" id="engine" maxlength="25">
+		<input type="text" name="engine" id="engine" maxlength="30">
 		<label for="hp">Horsepower: </label>
 		<input type="number" name="hp" id="hp">
 		<button type="submit">Add</button>

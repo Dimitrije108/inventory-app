@@ -7,11 +7,23 @@
 </head>
 <body>
 	<h1><%= manufacturer.name %></h1>
+	<div>
+		<span><%= manufacturer.founded %></span>
+		<span><%= manufacturer.owner %></span>
+	</div>
+	<button>
+		<a href="/<%= manufacturer.name %>/add-car">Add a car</a>
+	</button>
 	<ul>
 		<% cars.forEach(car => { %>
 			<li>
 				<a href="/<%= manufacturer.name %>/<%= car.id %>">
-					<%= car.name %>
+					<h2>Model: <%= car.model %></h2>
+					<div>Price: € <%= car.price %></div>
+					<div>Model year: <%= car.year %></div>
+					<div>Mileage: <%= car.mileage %> km</div>
+					<div>Engine: <%= car.engine %></div>
+					<div>Horsepower: <%= car.hp %> hp</div>
 				</a>
 			</li>
 		<% }) %>
