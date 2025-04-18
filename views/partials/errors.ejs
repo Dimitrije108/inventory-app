@@ -1,0 +1,6 @@
+<% if (locals.errors) { %>
+	<h2>Validation errors: </h2>
+	<% errors.forEach(error => { %>
+		<li><%= error.msg %></li>
+	<% }); %>
+<% } %>
