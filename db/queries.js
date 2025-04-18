@@ -5,25 +5,25 @@ async function getManufacturers() {
 	return rows;
 };
 
-async function getManufacturerByName(manufacturer) {
+async function getManufacturerByName(name) {
 	const { rows } = await pool.query(`
 		SELECT * FROM manufacturers
 		WHERE manufacturers.name = ($1)
-		`, [manufacturer]
+		`, [name]
 	);
 	return rows[0] || null;
 };
 
-async function getManufacturerById(manufacturerId) {
+async function getManufacturerById(id) {
 	const { rows } = await pool.query(`
 		SELECT * FROM manufacturers
 		WHERE manufacturers.id = ($1)
-		`, [manufacturerId]
+		`, [id]
 	);
 	return rows[0] || null;
 };
 // Get all cars from a specific manufacturer
-async function getManufacturerCars(manufacturer) {
+async function getManufacturerCars(name) {
 	const { rows } = await pool.query(`
 		SELECT 
 			cars.*,
@@ -31,7 +31,7 @@ async function getManufacturerCars(manufacturer) {
 		FROM cars 
 		JOIN manufacturers ON cars.manufacturer_id = manufacturers.id 
 		WHERE manufacturers.name = ($1)
-		`, [manufacturer]
+		`, [name]
 	);
 	return rows;
 };
@@ -67,6 +67,22 @@ async function insertCar(data) {
 	);
 };
 
+async function delManufacturer(name) {
+	await pool.query(`
+		DELETE FROM manufacturers 
+		WHERE manufacturers.name = ($1)
+		`, [name]
+	);
+};
+
+async function delCar(id) {
+	await pool.query(`
+		DELETE FROM cars 
+		WHERE cars.id = ($1)
+		`, [id]
+	);
+};
+
 module.exports = {
 	getManufacturers,
 	getManufacturerByName,
@@ -75,4 +91,6 @@ module.exports = {
 	getCarById,
 	insertManufacturer,
 	insertCar,
+	delManufacturer,
+	delCar,
 };

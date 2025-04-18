@@ -7,7 +7,7 @@
 </head>
 <body>
 	<h1><%= car.model %></h1>
-	<h2><%= car.manufacturer %></h2>
+	<h2><%= car.manufacturer_name %></h2>
 	<h3>Specs:</h3>
 	<ul>
 		<li>Price: € <%= car.price %></li>
@@ -16,5 +16,10 @@
 		<li>Engine: <%= car.engine %></li>
 		<li>Horsepower: <%= car.hp %> hp</li>
 	</ul>
+	<button>
+		<a href="/<%= car.manufacturer_name %>/<%= car.id %>/del">
+			Delete
+		</a>
+	</button>
 </body>
 </html>

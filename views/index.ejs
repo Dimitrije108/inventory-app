@@ -9,7 +9,9 @@
 <body>
 	<h1>Manufacturers</h1>
 	<button>
-		<a href="/add-manufacturer">Add a manufacturer</a>
+		<a href="/add-manufacturer">
+			Add a manufacturer
+		</a>
 	</button>
 	<% manufacturers.forEach(manufacturer => { %>
 		<div>
@@ -17,6 +19,11 @@
 				<h2><%= manufacturer.name %></h2>
 				<div>Founded: <%= manufacturer.founded %></div>
 				<div>Owner: <%= manufacturer.owner %></div>
+				<button>
+					<a href="/<%= manufacturer.name %>/del">
+						Delete
+					</a>
+				</button>
 			</a>
 		</div>
 	<% }) %>

@@ -103,6 +103,19 @@ const createManufacturerPost = [
 	})
 ];
 
+const delManufacturerGet = asyncHandler(async (req, res) => {
+	const manufacturerName = req.params.manufacturer;
+	const cars = await db.getManufacturerCars(manufacturerName);
+
+	if (cars.length > 0) {
+		res.send(`Cannot delete ${manufacturerName} - ${cars.length} car(s) depend on it. Reassign or delete cars first.`);
+		return;
+	}
+
+	await db.delManufacturer(manufacturerName);
+	res.redirect('/');
+});
+
 const createCarGet = asyncHandler(async (req, res) => {
 	const manufacturers = await db.getManufacturers();
 	res.render('createCar', {
@@ -131,7 +144,13 @@ const createCarPost = [
 		await db.insertCar([model, price, year, mileage, engine, hp, manufacturerId]);
 		res.redirect(`/${req.params.manufacturer}`);
 	})
-] 
+];
+
+const delCar = asyncHandler(async (req, res) => {
+	const carId = req.params.carId;
+	await db.delCar(carId);
+	res.redirect(`/${req.params.manufacturer}`);
+});
 
 module.exports = {
 	getManufacturers,
@@ -139,6 +158,8 @@ module.exports = {
 	getManufacturerCars,
 	createManufacturerGet,
 	createManufacturerPost,
+	delManufacturerGet,
 	createCarGet,
 	createCarPost,
+	delCar,
 };

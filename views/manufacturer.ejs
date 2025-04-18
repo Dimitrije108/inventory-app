@@ -26,6 +26,11 @@
 					<div>Horsepower: <%= car.hp %> hp</div>
 				</a>
 			</li>
+			<button>
+				<a href="/<%= manufacturer.name %>/<%= car.id %>/del">
+					Delete 
+				</a>
+			</button>
 		<% }) %>
 	</ul>
 </body>
