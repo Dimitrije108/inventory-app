@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Add a car</title>
+</head>
+<body>
+	<h1>Add a car</h1>
+	<!-- print out the errors if they exist -->
+	<%- include('partials/errors.ejs') %>
+	<form action="/<%= selectedManufacturer %>/<%= car.id %>/update" method="POST">
+		<input type="hidden" name="_method" value="PUT">
+		<label for="manufacturer">Choose a manufacturer:</label>
+		<select name="manufacturerId" id="manufacturer" required>
+			<option value="">--Please choose an option--</option>
+			<% manufacturers.forEach(manufacturer => { %>
+				<option 
+					value="<%= manufacturer.id %>"
+					<%= selectedManufacturer === manufacturer.name ? 'selected' : '' %>
+				><%= manufacturer.name %></option>
+			<% }) %>
+		</select>
+		<label for="model">Model: </label>
+		<input type="text" name="model" id="model" value="<%= car.model %>" maxlength="30" required>
+		<label for="price">Price: </label>
+		<input type="number" name="price" id="price" value="<%= car.price %>" required>
+		<label for="year">Year: </label>
+		<input 
+			type="number" 
+			name="year" 
+			id="year"
+			value="<%= car.year %>" 
+			min="1900" 
+			max="2100" 
+			step="1" 
+			placeholder="YYYY" 
+			required
+		>
+		<label for="mileage">Mileage: </label>
+		<input type="number" name="mileage" id="mileage" value="<%= car.mileage %>">
+		<label for="engine">Engine: </label>
+		<input type="text" name="engine" id="engine" value="<%= car.engine %>" maxlength="30">
+		<label for="hp">Horsepower: </label>
+		<input type="number" name="hp" id="hp" value="<%= car.hp %>">
+		<button type="submit">Update</button>
+	</form>
+</body>
+</html>

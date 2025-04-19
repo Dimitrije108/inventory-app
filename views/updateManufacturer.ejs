@@ -3,18 +3,20 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Add a manufacturer</title>
+	<title>Update manufacturer</title>
 </head>
 <body>
-	<h1>Add a manufacturer</h1>
+	<h1>Update manufacturer</h1>
 	<!-- print out the errors if they exist -->
 	<%- include('partials/errors.ejs') %>
-	<form action="/add-manufacturer" method="POST">
+	<form action="/<%= manufacturer.name %>/update/<%= manufacturer.id %>" method="POST">
+		<input type="hidden" name="_method" value="PUT">
 		<label for="name">Manufacturer: </label>
 		<input 
 			type="text" 
 			name="name" 
 			id="name" 
+			value="<%= manufacturer.name %>" 
 			minlength="1" 
 			maxlength="30" 
 			required
@@ -24,6 +26,7 @@
 			type="number" 
 			name="founded" 
 			id="founded" 
+			value="<%= manufacturer.founded %>"
 			min="1900" 
 			max="2100" 
 			step="1" 
@@ -35,9 +38,10 @@
 			type="text" 
 			name="owner" 
 			id="owner" 
+			value="<%= manufacturer.owner %>" 
 			maxlength="30"
 		>
-		<button type="submit">Add</button>
+		<button type="submit">Update</button>
 	</form>
 </body>
 </html>
