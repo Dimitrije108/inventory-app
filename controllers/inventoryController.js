@@ -9,12 +9,17 @@ const yearErr = 'must be a number between 1900 and 2100.';
 const validateManufacturer = [
 	body('name').trim()
 		.isLength({ min: 1, max: 30 }).withMessage(`Manufacturer name ${lengthErr}`)
-		.custom(async (value) => {
+		.custom(async (value, { req }) => {
 			const manufacturer = await db.getManufacturerByName(value);
-			if (manufacturer) {
-				throw new Error('Manufacturer name already exists.');
+			// When no manufacturer exists with the submitted name
+			if (!manufacturer) return true;
+			// When updating the manufacturer and when the name stays the same
+			// this prevents it from retuning a name already exists error
+			if (req.params.id && manufacturer.id.toString() === req.params.id.toString() ) {
+				return true;
 			}
-			return true;
+			
+			throw new Error('Manufacturer name already exists.');
 		}),
 	body('founded')
 		.isInt({ min: 1900, max: 2100 }).withMessage(`Year ${yearErr}`),
@@ -98,7 +103,33 @@ const createManufacturerPost = [
 		}
 		
 		const { name, founded, owner }  = req.body;
-		await db.insertManufacturer([name, founded, owner]);
+		await db.insertManufacturer({ name, founded, owner });
+		res.redirect('/');
+	})
+];
+
+const updateManufacturerGet = asyncHandler(async (req, res) => {
+	const manufacturer = await db.getManufacturerByName(req.params.manufacturer);
+	res.render('updateManufacturer', {
+		manufacturer
+	})
+});
+
+const updateManufacturerPut = [
+	validateManufacturer,
+	asyncHandler(async (req, res) => {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			const manufacturer = await db.getManufacturerByName(req.params.manufacturer);
+			// Return 400 Bad Request because of malformed request
+			return res.status(400).render('updateManufacturer', {
+				manufacturer,
+				errors: errors.array()
+			});
+		}
+		
+		const { name, founded, owner }  = req.body;
+		await db.updateManufacturer(req.params.manufacturer, { name, founded, owner });
 		res.redirect('/');
 	})
 ];
@@ -141,7 +172,50 @@ const createCarPost = [
 		const mileage = req.body.mileage ? parseInt(req.body.mileage) : null;
 		const hp = req.body.hp ? parseInt(req.body.hp) : null;
 
-		await db.insertCar([model, price, year, mileage, engine, hp, manufacturerId]);
+		await db.insertCar({ model, price, year, mileage, engine, hp, manufacturerId });
+		res.redirect(`/${req.params.manufacturer}`);
+	})
+];
+
+const updateCarGet = asyncHandler(async (req, res) => {
+	const manufacturers = await db.getManufacturers();
+	const car = await db.getCarById(req.params.carId);
+	res.render('updateCar', {
+		selectedManufacturer: req.params.manufacturer,
+		manufacturers,
+		car 
+	});
+});
+
+const updateCarPut = [
+	validateCar,
+	asyncHandler(async (req, res) => {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			const manufacturers = await db.getManufacturers();
+			const car = await db.getCarById(req.params.carId);
+			// Return 400 Bad Request because of malformed request
+			return res.status(400).render('updateCar', {
+				selectedManufacturer: req.params.manufacturer,
+				manufacturers,
+				car,
+				errors: errors.array()
+			});
+		}
+		
+		const { model, price, year, engine, manufacturerId }  = req.body;
+		const mileage = req.body.mileage ? parseInt(req.body.mileage) : null;
+		const hp = req.body.hp ? parseInt(req.body.hp) : null;
+
+		await db.updateCar(req.params.carId, { 
+			model, 
+			price, 
+			year, 
+			mileage, 
+			engine, 
+			hp, 
+			manufacturerId 
+		});
 		res.redirect(`/${req.params.manufacturer}`);
 	})
 ];
@@ -158,8 +232,12 @@ module.exports = {
 	getManufacturerCars,
 	createManufacturerGet,
 	createManufacturerPost,
+	updateManufacturerGet,
+	updateManufacturerPut,
 	delManufacturerGet,
 	createCarGet,
 	createCarPost,
+	updateCarGet,
+	updateCarPut,
 	delCar,
 };
