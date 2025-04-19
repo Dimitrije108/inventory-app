@@ -2,7 +2,7 @@
 
 <h2>Live</h2>
 
-🔥 [Live](inventory-app-production-24a3.up.railway.app)
+🔥 [Live](https://inventory-app-production-24a3.up.railway.app/)
 
 <h2>Implementation</h2>
 
